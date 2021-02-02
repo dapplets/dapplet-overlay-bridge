@@ -21,6 +21,8 @@ You can import the library as [ECMAScript module](https://developer.mozilla.org/
 
 You can try simple example written in one HTML file by this path: [`examples/pure-html-page`](https://github.com/dapplets/dapplet-overlay-bridge/tree/master/examples/pure-html-page).
 
+React.js based example also available in [`examples/react-overlay`](https://github.com/dapplets/dapplet-overlay-bridge/tree/master/examples/react-overlay).
+
 ```javascript
 // Dapplet side
 const overlay = Core.overlay({ url: 'http://localhost:5000', title: 'Overlay' });
