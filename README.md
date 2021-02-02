@@ -19,7 +19,7 @@ You can import the library as [ECMAScript module](https://developer.mozilla.org/
 
 ## Usage
 
-You can try simple example written in one HTML file by this path: [`examples/pure-html-page/index.html`](https://github.com/dapplets/dapplet-overlay-bridge/blob/master/examples/pure-html-page/index.html).
+You can try simple example written in one HTML file by this path: [`examples/pure-html-page`](https://github.com/dapplets/dapplet-overlay-bridge/tree/master/examples/pure-html-page).
 
 ```javascript
 // Dapplet side
