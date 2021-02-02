@@ -1,0 +1,31 @@
+{
+  "name": "@dapplets/dapplet-overlay-bridge",
+  "version": "0.1.0",
+  "description": "The bridge between dapplet and overlay",
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dapplets/dapplet-overlay-bridge.git"
+  },
+  "keywords": [
+    "dapplets",
+    "overlay"
+  ],
+  "author": "Dapplets Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dapplets/dapplet-overlay-bridge/issues"
+  },
+  "homepage": "https://github.com/dapplets/dapplet-overlay-bridge#readme",
+  "devDependencies": {
+    "typescript": "^4.1.3"
+  }
+}
