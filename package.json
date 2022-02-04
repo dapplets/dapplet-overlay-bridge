@@ -1,6 +1,6 @@
 {
   "name": "@dapplets/dapplet-overlay-bridge",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The bridge between dapplet and overlay",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
