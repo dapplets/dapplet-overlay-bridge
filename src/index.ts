@@ -1,7 +1,7 @@
 class Bridge {
     _subId: number = 0;
     _callbacks: { [topic: string]: Function[] } = {};
-  
+
     constructor() {
         window.addEventListener('message', async (e) => {
             try {
@@ -23,30 +23,60 @@ class Bridge {
             }
             catch (ex) { }
         });
-        return new Proxy(this, {
-            get: (target, name: string) => {
-            if (name === 'on') {
-                return (event: string, callback: Function) => {
-                this.subscribe(event, (data: any) => {
-                    this._subId = Math.trunc(Math.random() * 1_000_000_000);
-                    callback(data);
-                    return this._subId.toString();
+
+        const _call = (
+            method: string,
+            args: any,
+        ): Promise<any> => {
+            const callbackEventDone = method + '_done';
+            const callbackEventUndone = method + '_undone';
+            return new Promise((res, rej) => {
+                this.publish(this._subId.toString(), {
+                    type: method,
+                    message: args,
                 });
+                this.subscribe(callbackEventDone, (result: any) => {
+                    this.unsubscribe(callbackEventDone);
+                    this.unsubscribe(callbackEventUndone);
+                    res(result);
+                });
+                this.subscribe(callbackEventUndone, (err?: any) => {
+                    this.unsubscribe(callbackEventUndone);
+                    this.unsubscribe(callbackEventDone);
+                    rej(`Error in ${method}. ${err ? err : ''}`);
+                });
+            });
+        }
+
+        return new Proxy(this, {
+            get: (target: any, prop: string) => {
+                if (prop in target) {
+                    return target[prop];
+                } else {
+                    return (...args: any) => _call(prop, args);
                 }
-            }
-            if (name === 'off') (event: string) => {
-                this.unsubscribe(event);
-                return;
-            };
-            return (...args: any) => this._call(name, args);
             },
         });
+    }
+
+    on(event: string, callback: Function) {
+        this.subscribe(event, (data: any) => {
+            this._subId = Math.trunc(Math.random() * 1_000_000_000);
+            callback(data);
+            return this._subId.toString();
+        });
+    }
+
+    off(event: string) {
+        this.unsubscribe(event);
+        return;
     }
 
     publish(topic: string, message: any): void {
         const msg = JSON.stringify({ topic, message });
         window.parent.postMessage(msg, '*');
     }
+
     subscribe(topic: string, handler: Function): void {
         if (!this._callbacks[topic]) {
             this._callbacks[topic] = [];
@@ -57,38 +87,12 @@ class Bridge {
     unsubscribe(topic: string): void {
         this._callbacks[topic] = [];
     }
-  
-    private async _call(
-        method: string,
-        args: any,
-    ): Promise<any> {
-        const callbackEventDone = method + '_done';
-        const callbackEventUndone = method + '_undone';
-        return new Promise((res, rej) => {
-            this.publish(this._subId.toString(), {
-                type: method,
-                message: args,
-            });
-            this.subscribe(callbackEventDone, (result: any) => {
-                this.unsubscribe(callbackEventDone);
-                this.unsubscribe(callbackEventUndone);
-                res(result);
-            });
-            this.subscribe(callbackEventUndone, (err?: any) => {
-                this.unsubscribe(callbackEventUndone);
-                this.unsubscribe(callbackEventDone);
-                rej(`Error in ${method}. ${err ? err : ''}`);
-            });
-        });
-    }
 }
 
-interface OnOff {
-    on: (event: string, callback: Function) => void
-    off: (event: string) => void
-}
 interface IBridge {
-    new <T>(): Bridge & T & OnOff
+    new <T = {}>(): Bridge & T
 }
+
 const GeneralBridge: IBridge = Bridge as any;
+
 export default GeneralBridge;
