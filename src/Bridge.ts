@@ -89,8 +89,10 @@ export class GeneralBridge {
     }
 }
 
+export type Bridge<T> = GeneralBridge & T;
+
 export interface IBridge {
-    new <T = {}>(): GeneralBridge & T
+    new <T = {}>(): Bridge<T>
 }
 
 export const Bridge: IBridge = GeneralBridge as any;
