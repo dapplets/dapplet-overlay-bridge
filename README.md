@@ -1,4 +1,7 @@
-# Dapplet-Overlay Bridge
+<img width="1245" alt="dapplet-overlay-bridge" src="https://user-images.githubusercontent.com/43613968/225065715-e863fe93-0573-42df-81e9-7e8546458f83.png">
+
+# Dapplet Overlay Bridge
+
 TypeScript library for two-way communication between a dapplet and an overlay.
 
 ## Installation
